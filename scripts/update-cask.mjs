@@ -9,13 +9,18 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const caskPath = path.join(root, "Casks", "stage5-translator.rb");
 const checkOnly = process.argv.includes("--check");
 const releaseUrl = "https://api.github.com/repos/mikey1384/translator/releases/latest";
+const headers = {
+  Accept: "application/vnd.github+json",
+  "User-Agent": "stage5-homebrew-translator-updater",
+  "X-GitHub-Api-Version": "2022-11-28",
+};
+
+if (process.env.GITHUB_TOKEN) {
+  headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+}
 
 const response = await fetch(releaseUrl, {
-  headers: {
-    Accept: "application/vnd.github+json",
-    "User-Agent": "stage5-homebrew-translator-updater",
-    "X-GitHub-Api-Version": "2022-11-28",
-  },
+  headers,
 });
 assert.equal(response.ok, true, `GitHub release API returned ${response.status}`);
 

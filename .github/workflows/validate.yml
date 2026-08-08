@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify cask matches the latest Translator release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/update-cask.mjs --check
       - name: Check Homebrew style
         run: |
