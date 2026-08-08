@@ -3,6 +3,7 @@ Set-StrictMode -Version Latest
 
 $currentVersion = "1.16.5"
 $previousVersion = "1.16.3"
+$expectedRegistryPublisher = "Mikey Lee"
 $downloadRoot = Join-Path $env:RUNNER_TEMP "translator-installer-smoke"
 New-Item -ItemType Directory -Force -Path $downloadRoot | Out-Null
 
@@ -84,7 +85,7 @@ function Install-Translator {
   if ($entry.DisplayVersion -ne $ExpectedVersion) {
     throw "$Scenario installed version $($entry.DisplayVersion), expected $ExpectedVersion."
   }
-  if ($entry.Publisher -notmatch "Stage5 Tools LLC") {
+  if ($entry.Publisher -ne $expectedRegistryPublisher) {
     throw "$Scenario registered unexpected publisher: $($entry.Publisher)"
   }
   if ([string]::IsNullOrWhiteSpace($entry.InstallLocation) -or -not (Test-Path $entry.InstallLocation)) {
