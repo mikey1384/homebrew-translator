@@ -16,4 +16,7 @@ jobs:
       - name: Verify cask matches the latest Translator release
         run: node scripts/update-cask.mjs --check
       - name: Check Homebrew style
-        run: brew style --cask Casks/stage5-translator.rb
+        run: |
+          brew tap-new stage5/translator-ci
+          cp Casks/stage5-translator.rb "$(brew --repository stage5/translator-ci)/Casks/"
+          brew style --cask stage5/translator-ci/stage5-translator
