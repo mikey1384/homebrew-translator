@@ -68,6 +68,36 @@ function Wait-ForTranslatorState {
   throw "Translator did not reach installed=$Installed within $TimeoutSeconds seconds."
 }
 
+function Get-TranslatorInstallDirectory {
+  param(
+    [Parameter(Mandatory = $true)]$Entry
+  )
+
+  if (
+    $null -ne $Entry.PSObject.Properties["InstallLocation"] -and
+    -not [string]::IsNullOrWhiteSpace($Entry.InstallLocation) -and
+    (Test-Path $Entry.InstallLocation)
+  ) {
+    return $Entry.InstallLocation
+  }
+
+  foreach ($propertyName in @("QuietUninstallString", "UninstallString")) {
+    if ($null -eq $Entry.PSObject.Properties[$propertyName]) { continue }
+    $command = [string]$Entry.$propertyName
+    if ($command -match '^\s*"([^"]+\.exe)"') {
+      return Split-Path -Parent $Matches[1]
+    }
+    if ($command -match '^\s*(.+?\.exe)(?:\s|$)') {
+      return Split-Path -Parent $Matches[1]
+    }
+  }
+
+  $defaultDirectory = Join-Path $env:ProgramFiles "Translator"
+  if (Test-Path $defaultDirectory) { return $defaultDirectory }
+
+  throw "Translator is registered but its installation directory could not be resolved."
+}
+
 function Install-Translator {
   param(
     [Parameter(Mandatory = $true)][string]$Installer,
@@ -88,16 +118,13 @@ function Install-Translator {
   if ($entry.Publisher -ne $expectedRegistryPublisher) {
     throw "$Scenario registered unexpected publisher: $($entry.Publisher)"
   }
-  if ([string]::IsNullOrWhiteSpace($entry.InstallLocation) -or -not (Test-Path $entry.InstallLocation)) {
-    throw "$Scenario did not register a valid install location."
-  }
-
-  $app = Join-Path $entry.InstallLocation "Translator.exe"
+  $installDirectory = Get-TranslatorInstallDirectory -Entry $entry
+  $app = Join-Path $installDirectory "Translator.exe"
   if (-not (Test-Path $app)) {
     throw "$Scenario did not install Translator.exe at $app."
   }
 
-  Write-Host "$Scenario passed: version $($entry.DisplayVersion), publisher $($entry.Publisher), location $($entry.InstallLocation)"
+  Write-Host "$Scenario passed: version $($entry.DisplayVersion), publisher $($entry.Publisher), location $installDirectory"
 }
 
 function Uninstall-Translator {
@@ -110,10 +137,21 @@ function Uninstall-Translator {
     throw "$Scenario could not find the Translator uninstall entry."
   }
 
-  $command = if (-not [string]::IsNullOrWhiteSpace($entry.QuietUninstallString)) {
-    $entry.QuietUninstallString
+  $quietUninstallString = if ($null -ne $entry.PSObject.Properties["QuietUninstallString"]) {
+    [string]$entry.QuietUninstallString
   } else {
-    $entry.UninstallString
+    ""
+  }
+  $uninstallString = if ($null -ne $entry.PSObject.Properties["UninstallString"]) {
+    [string]$entry.UninstallString
+  } else {
+    ""
+  }
+
+  $command = if (-not [string]::IsNullOrWhiteSpace($quietUninstallString)) {
+    $quietUninstallString
+  } else {
+    $uninstallString
   }
   if ([string]::IsNullOrWhiteSpace($command)) {
     throw "$Scenario found no uninstall command."
