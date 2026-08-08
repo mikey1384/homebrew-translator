@@ -43,7 +43,10 @@ function Get-TranslatorUninstallEntry {
   )
 
   return Get-ItemProperty -Path $roots -ErrorAction SilentlyContinue |
-    Where-Object { $_.DisplayName -eq "Translator" } |
+    Where-Object {
+      $null -ne $_.PSObject.Properties["DisplayName"] -and
+      $_.DisplayName -eq "Translator"
+    } |
     Select-Object -First 1
 }
 
