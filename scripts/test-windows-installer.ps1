@@ -13,7 +13,9 @@ function Download-And-VerifyInstaller {
 
   $baseUrl = "https://downloads.stage5.tools/win/$Version/Translator-x64.exe"
   $installer = Join-Path $downloadRoot "Translator-$Version-x64.exe"
-  $checksumText = (Invoke-WebRequest -UseBasicParsing "$baseUrl.sha256").Content.Trim()
+  $checksumFile = "$installer.sha256"
+  Invoke-WebRequest -UseBasicParsing "$baseUrl.sha256" -OutFile $checksumFile
+  $checksumText = (Get-Content -Raw -Path $checksumFile).Trim()
   $expectedSha = ($checksumText -split '\s+')[0].ToUpperInvariant()
 
   Invoke-WebRequest -UseBasicParsing $baseUrl -OutFile $installer
