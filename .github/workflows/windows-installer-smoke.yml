@@ -1,0 +1,17 @@
+name: Windows installer smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Test clean install, reinstall, upgrade, and uninstall
+        shell: pwsh
+        run: ./scripts/test-windows-installer.ps1
