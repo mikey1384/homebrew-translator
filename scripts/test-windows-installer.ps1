@@ -30,7 +30,7 @@ function Download-And-VerifyInstaller {
     throw "Translator $Version is signed by an unexpected subject: $($signature.SignerCertificate.Subject)"
   }
 
-  Write-Host "Verified Translator $Version: SHA-256 $actualSha; signer $($signature.SignerCertificate.Subject)"
+  Write-Host "Verified Translator ${Version}: SHA-256 $actualSha; signer $($signature.SignerCertificate.Subject)"
   return $installer
 }
 
