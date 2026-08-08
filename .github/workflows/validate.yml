@@ -12,7 +12,7 @@ jobs:
   validate:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Verify cask matches the latest Translator release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
