@@ -1,0 +1,19 @@
+name: Validate tap
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify cask matches the latest Translator release
+        run: node scripts/update-cask.mjs --check
+      - name: Check Homebrew style
+        run: brew style --cask Casks/stage5-translator.rb
