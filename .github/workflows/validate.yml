@@ -20,5 +20,6 @@ jobs:
       - name: Check Homebrew style
         run: |
           brew tap-new stage5/translator-ci
+          mkdir -p "$(brew --repository stage5/translator-ci)/Casks"
           cp Casks/stage5-translator.rb "$(brew --repository stage5/translator-ci)/Casks/"
           brew style --cask stage5/translator-ci/stage5-translator
