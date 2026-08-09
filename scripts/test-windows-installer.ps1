@@ -1,8 +1,13 @@
+param(
+  [Parameter(Mandatory = $false)][string]$CurrentVersion = "1.16.6",
+  [Parameter(Mandatory = $false)][string]$PreviousVersion = "1.16.5"
+)
+
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-$currentVersion = "1.16.5"
-$previousVersion = "1.16.3"
+$currentVersion = $CurrentVersion
+$previousVersion = $PreviousVersion
 $expectedRegistryPublisher = "Mikey Lee"
 $downloadRoot = Join-Path $env:RUNNER_TEMP "translator-installer-smoke"
 New-Item -ItemType Directory -Force -Path $downloadRoot | Out-Null

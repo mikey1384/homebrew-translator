@@ -2,6 +2,15 @@ name: Windows installer smoke test
 
 on:
   workflow_dispatch:
+    inputs:
+      current_version:
+        description: Current Translator version to validate
+        required: true
+        default: "1.16.6"
+      previous_version:
+        description: Previous Translator version used for the upgrade test
+        required: true
+        default: "1.16.5"
 
 permissions:
   contents: read
@@ -14,4 +23,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Test clean install, reinstall, upgrade, and uninstall
         shell: pwsh
-        run: ./scripts/test-windows-installer.ps1
+        run: >-
+          ./scripts/test-windows-installer.ps1
+          -CurrentVersion '${{ inputs.current_version }}'
+          -PreviousVersion '${{ inputs.previous_version }}'
