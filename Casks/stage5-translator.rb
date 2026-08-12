@@ -1,9 +1,9 @@
 cask "stage5-translator" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.16.10"
-  sha256 arm:   "e4c4193528c7838ee8a9b92839d9331d7f107c8f2ecf945ce2ead6889c9c1b95",
-         intel: "ef1fba5ec2e6e9d5309b32e900a9b33fae35dbc0c4b1d3a329dcc2fa91cef1ff"
+  version "1.16.11"
+  sha256 arm:   "122a92fb35ff115805fcb27ea71ac5c2aabd61202f3a7a4237adbb80a59084f7",
+         intel: "471f34c974f533a1a909cb4afb3e30ad4b7f7a0f4a2e672215657d4b17c36ccb"
 
   url "https://github.com/mikey1384/translator/releases/download/v#{version}/Translator-#{version}-darwin-#{arch}.zip",
       verified: "github.com/mikey1384/translator/"
