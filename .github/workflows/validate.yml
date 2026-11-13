@@ -13,6 +13,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Test release tag and cask URL handling
+        run: node --test scripts/update-cask.test.mjs
       - name: Verify cask matches the latest Translator release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
