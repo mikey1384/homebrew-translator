@@ -1,11 +1,11 @@
 cask "stage5-translator" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.33.1"
-  sha256 arm:   "8e317ad92b102e3fc58c753c706a50f90c5960428d91ab1330105bedc7e01835",
-         intel: "24bfd3bad1ba82cb558c745b1dd19b05115287f997718d5cfda7c431c2a0d07c"
+  version "1.35.0"
+  sha256 arm:   "d3c784857de3b5e22bbd9e56ed3b557991cc3708c757867bdb9526ed207141b5",
+         intel: "20ab51f0aaeac5ba1592d572f1e9114a541dff9ac1e22ec89d15d44521fd52c0"
 
-  url "https://github.com/mikey1384/translator/releases/download/v#{version}-mac/Translator-#{version}-darwin-#{arch}.zip",
+  url "https://github.com/mikey1384/translator/releases/download/v#{version}/Translator-#{version}-darwin-#{arch}.zip",
       verified: "github.com/mikey1384/translator/"
   name "Translator"
   desc "Video discovery, subtitle translation, editing, dubbing, and export workstation"
